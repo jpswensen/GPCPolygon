@@ -14,7 +14,7 @@
 @interface GPCPolygon : NSObject
 {
     @public
-    gpc_polygon* _poly;
+    gpc_polygon _poly;
 }
 
 /*! Initialize a polygon with a vector of points values
@@ -26,6 +26,11 @@
  * @param points A gpc_vertex_list of points (assumed to be outer ring).
  */
 - (GPCPolygon*) initWithVertexList:(gpc_vertex_list)points;
+
+/*! Determine the hole status of the polygon.
+ */
+- (BOOL) isHoleFromWinding;
+- (BOOL) isHoleFromWindingList:(gpc_vertex_list)list;
 
 /*! Determine the hole status of the polygon.
  */
@@ -59,6 +64,11 @@
  */
 - (NSMutableArray*) toArray;
 
+/*! Compute the area of the polygon set.
+ */
+- (float) area;
+
+
 @end
 
 
@@ -67,7 +77,7 @@
 @interface GPCPolygonSet : NSObject
 {
     @public
-    gpc_polygon* _polys;
+    gpc_polygon _polys;
 }
 
 /*! Initialize a set of polygons with an array of arrays of points values.
@@ -83,6 +93,8 @@
 /*! Determine the number of polygons in the set.
  */
 - (int) count;
+
+- (void) addPolygon:(GPCPolygon*)poly;
 
 /*! Retrieve the i-th polygon from the set
  * @param idx The index of the polygon to be retrieved.
@@ -142,5 +154,9 @@
  * @param mask The polygon set to mask the current set with before triangulating.
  */
 - (NSMutableArray*) triangulateStripWithMask:(GPCPolygonSet*)mask;
+
+/*! Compute the area of the polygon set.
+ */
+- (float) area;
 
 @end
